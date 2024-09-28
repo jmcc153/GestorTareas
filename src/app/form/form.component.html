@@ -1,0 +1,57 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="titleModal">
+    <h2>Crear Nueva Tarea</h2>
+    <button (click)="onClose()">X</button>
+  </div>
+
+  <div>
+    <label for="title">Nombre de la tarea:</label>
+    <input id="title" formControlName="title" />
+    <div *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+      Este campo es requerido.
+    </div>
+  </div>
+
+  <div>
+    <label for="deadline">Fecha límite:</label>
+    <input id="deadline" type="date" formControlName="deadline" />
+    <div *ngIf="form.get('deadline')?.invalid && form.get('deadline')?.touched">
+      Este campo es requerido.
+    </div>
+  </div>
+
+  <h3>Personas Asociadas:</h3>
+  <div formArrayName="people">
+    <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i">
+      <div>
+        <label for="name-{{i}}">Nombre completo:</label>
+        <input id="name-{{i}}" formControlName="name" />
+        <div *ngIf="person.get('name')?.invalid && person.get('name')?.touched">
+          Este campo es requerido.
+        </div>
+      </div>
+
+      <div>
+        <label for="age-{{i}}">Edad:</label>
+        <input id="age-{{i}}" type="number" formControlName="age" />
+        <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched">
+          Este campo es requerido y debe ser mayor que 0.
+        </div>
+      </div>
+
+      <div formArrayName="skills">
+        <label>Habilidades:</label>
+        <div *ngFor="let skill of skills(i).controls let j = index">
+          <input [formControlName]="j" />
+          <button type="button" (click)="removeSkill(i, j)">Eliminar Habilidad</button>
+        </div>
+        <button type="button" (click)="addSkill(i)">Añadir Habilidad</button>
+      </div>
+
+      <button type="button" (click)="removePerson(i)">Eliminar Persona</button>
+    </div>
+  </div>
+
+  <button type="button" (click)="addPerson()">Añadir Persona</button>
+  <button type="submit" [disabled]="form.invalid" >Guardar Tarea</button>
+</form>
