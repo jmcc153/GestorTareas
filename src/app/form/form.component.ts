@@ -5,11 +5,13 @@ import { Task } from '../models/task.model';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { addTask } from '../shared/store/task.action';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })

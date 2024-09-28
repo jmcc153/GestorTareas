@@ -12,9 +12,9 @@
       <button (click)="openModal()">Añadir tarea</button>
     </div>
     <div class="task-list__filters">
-      <button (click)="filterTasks('all')">All</button>
-      <button (click)="filterTasks('completed')">Completed</button>
-      <button (click)="filterTasks('pending')">Pending</button>
+      <button (click)="filterTasks('all')">Todas</button>
+      <button (click)="filterTasks('completed')">Completadas</button>
+      <button (click)="filterTasks('pending')">Pendientes</button>
     </div>
     <div class="list">
       <div class="list-item" *ngFor="let task of filteredTasks$ | async">

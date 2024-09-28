@@ -1,10 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <button class="btn-close" (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
   <div class="titleModal">
     <h2>Crear Nueva Tarea</h2>
-    <button (click)="onClose()">X</button>
   </div>
 
-  <div>
+  <div class="containerInput">
     <label for="title">Nombre de la tarea:</label>
     <input id="title" formControlName="title" />
     <div *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
@@ -12,18 +14,19 @@
     </div>
   </div>
 
-  <div>
+  <div class="containerInput">
     <label for="deadline">Fecha límite:</label>
     <input id="deadline" type="date" formControlName="deadline" />
-    <div *ngIf="form.get('deadline')?.invalid && form.get('deadline')?.touched">
+    <div class="error" *ngIf="form.get('deadline')?.invalid && form.get('deadline')?.touched">
       Este campo es requerido.
     </div>
   </div>
 
-  <h3>Personas Asociadas:</h3>
-  <div formArrayName="people">
-    <div *ngFor="let person of people.controls; let i = index" [formGroupName]="i">
-      <div>
+    <h3>Personas Asociadas:</h3>
+    
+  <div class="containerPeople" formArrayName="people">
+    <div class="inputsPeople" *ngFor="let person of people.controls; let i = index" [formGroupName]="i">
+      <div class="containerInput">
         <label for="name-{{i}}">Nombre completo:</label>
         <input id="name-{{i}}" formControlName="name" />
         <div *ngIf="person.get('name')?.invalid && person.get('name')?.touched">
@@ -31,7 +34,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="containerInput">
         <label for="age-{{i}}">Edad:</label>
         <input id="age-{{i}}" type="number" formControlName="age" />
         <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched">
@@ -39,19 +42,26 @@
         </div>
       </div>
 
-      <div formArrayName="skills">
-        <label>Habilidades:</label>
-        <div *ngFor="let skill of skills(i).controls let j = index">
-          <input [formControlName]="j" />
-          <button type="button" (click)="removeSkill(i, j)">Eliminar Habilidad</button>
+      <div class="containerInput" formArrayName="skills">
+        <div class="containerBtnAddPerson">
+          <label>Habilidades:</label>
+          <mat-icon class="iconAddSkill" (click)="addSkill(i)">add</mat-icon>
         </div>
-        <button type="button" (click)="addSkill(i)">Añadir Habilidad</button>
+        <div class="skillInput" *ngFor="let skill of skills(i).controls let j = index">
+          <input [formControlName]="j" />
+          <button type="button" (click)="removeSkill(i, j)">X</button>
+        </div>
+        
       </div>
-
-      <button type="button" (click)="removePerson(i)">Eliminar Persona</button>
+      <div class="containerBtnAddPerson">
+        <p>Eliminar persona</p>
+        <mat-icon class="iconDeletePerson" (click)="removePerson(i)">delete</mat-icon>
+      </div>
+    </div>
+    <div class="containerBtnAddPerson">
+      <mat-icon class="iconAddPeople" (click)="addPerson()">person_add</mat-icon>
     </div>
   </div>
 
-  <button type="button" (click)="addPerson()">Añadir Persona</button>
-  <button type="submit" [disabled]="form.invalid" >Guardar Tarea</button>
+  <button class="btn-save" type="submit" [disabled]="form.invalid" >Guardar Tarea</button>
 </form>
