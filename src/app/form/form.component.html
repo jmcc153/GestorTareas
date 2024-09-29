@@ -9,7 +9,7 @@
   <div class="containerInput">
     <label for="title">Nombre de la tarea:</label>
     <input id="title" formControlName="title" />
-    <div *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+    <div class="error" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
       Este campo es requerido.
     </div>
   </div>
@@ -29,7 +29,7 @@
       <div class="containerInput">
         <label for="name-{{i}}">Nombre completo:</label>
         <input id="name-{{i}}" formControlName="name" />
-        <div *ngIf="person.get('name')?.invalid && person.get('name')?.touched">
+        <div class="error" *ngIf="person.get('name')?.invalid && person.get('name')?.touched">
           Este campo es requerido.
         </div>
       </div>
@@ -37,7 +37,7 @@
       <div class="containerInput">
         <label for="age-{{i}}">Edad:</label>
         <input id="age-{{i}}" type="number" formControlName="age" />
-        <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched">
+        <div class="error" *ngIf="person.get('age')?.invalid && person.get('age')?.touched">
           Este campo es requerido y debe ser mayor que 0.
         </div>
       </div>
@@ -62,6 +62,10 @@
       <mat-icon class="iconAddPeople" (click)="addPerson()">person_add</mat-icon>
     </div>
   </div>
+  <div *ngIf="people.hasError('duplicateName')">
+    <p>Los nombres no pueden repetirse.</p>
+  </div>
 
-  <button class="btn-save" type="submit" [disabled]="form.invalid" >Guardar Tarea</button>
+  <button class="btn-save" type="submit" [disabled]="form.invalid
+  " >Guardar Tarea</button>
 </form>

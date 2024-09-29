@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Task } from '../models/task.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { addTask } from '../shared/store/task.action';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +29,7 @@ export class FormComponent {
       title: ['', Validators.required],
       deadline: ['', Validators.required],
       completed: [false],
-      people: this.formBuilder.array([this.createPerson()]) 
+      people: this.formBuilder.array([this.createPerson()], this.noDuplicateNames()) 
     });
   }
 
@@ -43,7 +43,6 @@ export class FormComponent {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   });
   }
-  //generate incremental id to length of tasks
   generateId(): number {
     let id = 0;
     this.tasks$.subscribe(tasks => {
@@ -63,11 +62,23 @@ export class FormComponent {
 
   createPerson(): FormGroup {
     return this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(5)]],
       age: ['', [Validators.required, Validators.min(18)]],
       skills: this.formBuilder.array([this.formBuilder.control('',[Validators.required])])
     });
   }
+
+  noDuplicateNames(): ValidatorFn {
+    return (formArray: AbstractControl): ValidationErrors | null => {
+      const people = formArray.value as { name: string }[];
+      const names = people.map(person => person.name);
+      
+      const hasDuplicate = names.some((name, index) => names.indexOf(name) !== index);
+      
+      return hasDuplicate ? { duplicateName: true } : null;
+    };
+  }
+
 
   addPerson(): void {
     this.people.push(this.createPerson());
@@ -91,6 +102,5 @@ export class FormComponent {
       this.addTask();
       this.form.reset();
     }
-    console.log(this.tasks$);
   }
 }
