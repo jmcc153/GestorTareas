@@ -101,7 +101,9 @@ ul{
         background-color: $tertiaryColor;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         border-radius: 4px;
-        
+        max-height: 300px;
+        overflow-y: auto;
+        box-sizing: border-box;
         .task-card{
           display: flex;
           align-items: center;
